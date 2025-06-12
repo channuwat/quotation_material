@@ -1,0 +1,7 @@
+{
+  "name": "quotation_material",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
