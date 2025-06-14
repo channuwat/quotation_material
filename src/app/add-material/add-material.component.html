@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>เพิ่มวัตถุดิบใหม่</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="addMaterial()" #materialForm="ngForm">
+    <ion-item>
+      <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
+      <ion-input [(ngModel)]="material.name" name="name" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">หน่วย</ion-label>
+      <ion-input [(ngModel)]="material.unit" name="unit" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">ประเภท</ion-label>
+      <ion-select [(ngModel)]="material.type" name="type" required>
+        <ion-select-option value="purchase">ต้องซื้อ</ion-select-option>
+        <ion-select-option value="refill">เติมจากสต๊อก</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">จำนวนคงเหลือ</ion-label>
+      <ion-input type="number" [(ngModel)]="material.stockQty" name="stockQty" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">จำนวนขั้นต่ำ</ion-label>
+      <ion-input type="number" [(ngModel)]="material.minQty" name="minQty" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="!materialForm.form.valid">
+      บันทึกวัตถุดิบ
+    </ion-button>
+  </form>
+</ion-content>
