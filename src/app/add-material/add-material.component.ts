@@ -8,34 +8,32 @@ import { getDatabase, push, ref, set } from 'firebase/database';
   styleUrls: ['./add-material.component.scss'],
   standalone: false
 })
-export class AddMaterialComponent  implements OnInit {
+export class AddMaterialComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
-    material = {
+  material = {
     name: '',
     unit: '',
     type: '',
-    stockQty: 0,
-    minQty: 0
+    category: '',
+    storageLocation: ''
   };
 
   async addMaterial() {
     const db = getDatabase();
     const materialsRef = ref(db, 'materials');
     const newRef = push(materialsRef);
-    const needToReorder = this.material.stockQty < this.material.minQty;
 
     await set(newRef, {
       ...this.material,
-      needToReorder,
       lastUpdated: new Date().toISOString()
     });
 
     alert('✅ เพิ่มวัตถุดิบเรียบร้อยแล้ว');
-    this.material = { name: '', unit: '', type: '', stockQty: 0, minQty: 0 };
+    this.material = { name: '', unit: '', type: '', category: '', storageLocation: '' };
   }
 
 }

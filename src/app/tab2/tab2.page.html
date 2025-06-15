@@ -5,105 +5,23 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <ion-list *ngIf="materials.length > 0; else empty">
-    <ion-item *ngFor="let m of materials">
-      <ion-label>
-        <h2>{{ m.name }} ({{ m.unit }})</h2>
-        <p>จำนวนคงเหลือ: {{ m.stockQty }}</p>
-        <p>ขั้นต่ำ: {{ m.minQty }}</p>
-        <p>
-          <ion-badge color="{{ m.needToReorder ? 'danger' : 'success' }}">
-            {{ m.needToReorder ? '⚠️ ต้องเติม/ซื้อ' : '✅ เพียงพอ' }}
-          </ion-badge>
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
+  <ng-container *ngIf="groupedMaterials | keyvalue as categories">
+    <div *ngFor="let cat of categories">
+      <ion-text color="primary">
+        <h2 class="ion-padding-top">{{ cat.key }}</h2>
+      </ion-text>
 
-  <ion-list *ngIf="materials.length > 0; else empty">
-    <ion-item *ngFor="let m of materials">
-      <ion-label>
-        <h2>{{ m.name }} ({{ m.unit }})</h2>
-        <p>จำนวนคงเหลือ: {{ m.stockQty }}</p>
-        <p>ขั้นต่ำ: {{ m.minQty }}</p>
-        <p>
-          <ion-badge color="{{ m.needToReorder ? 'danger' : 'success' }}">
-            {{ m.needToReorder ? '⚠️ ต้องเติม/ซื้อ' : '✅ เพียงพอ' }}
-          </ion-badge>
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngIf="materials.length > 0; else empty">
-    <ion-item *ngFor="let m of materials">
-      <ion-label>
-        <h2>{{ m.name }} ({{ m.unit }})</h2>
-        <p>จำนวนคงเหลือ: {{ m.stockQty }}</p>
-        <p>ขั้นต่ำ: {{ m.minQty }}</p>
-        <p>
-          <ion-badge color="{{ m.needToReorder ? 'danger' : 'success' }}">
-            {{ m.needToReorder ? '⚠️ ต้องเติม/ซื้อ' : '✅ เพียงพอ' }}
-          </ion-badge>
-        </p>
-      </ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ng-template #empty>
-    <ion-text color="medium">
-      <p class="ion-padding-top">ยังไม่มีข้อมูลวัตถุดิบ</p>
-    </ion-text>
-  </ng-template>
-
-  <!-- FAB ปุ่มเพิ่มวัตถุดิบ -->
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button routerLink="add-material">
-    <ion-icon name="add-outline"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
-
+      <ion-list>
+        <ion-item *ngFor="let m of cat.value">
+          <ion-label>
+            <h3>{{ m.name }} ({{ m.unit }})</h3>
+            <p>คงเหลือ: {{ m.stockQty }} | ขั้นต่ำ: {{ m.minQty }}</p>
+            <ion-badge color="{{ m.needToReorder ? 'danger' : 'success' }}">
+              {{ m.needToReorder ? '⚠️ ต้องเติม' : '✅ เพียงพอ' }}
+            </ion-badge>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </ng-container>
 </ion-content>
-
-
-
-
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>เพิ่มวัตถุดิบ</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  <form (ngSubmit)="addMaterial()">
-    <ion-item>
-      <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
-      <ion-input [(ngModel)]="material.name" name="name" required></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">หน่วย (เช่น กก., แผง)</ion-label>
-      <ion-input [(ngModel)]="material.unit" name="unit" required></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">ประเภท</ion-label>
-      <ion-select [(ngModel)]="material.type" name="type" required>
-        <ion-select-option value="purchase">ต้องซื้อ</ion-select-option>
-        <ion-select-option value="refill">เติมจากสต๊อก</ion-select-option>
-      </ion-select>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">จำนวนคงเหลือ</ion-label>
-      <ion-input type="number" [(ngModel)]="material.stockQty" name="stockQty" required></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">จำนวนขั้นต่ำ</ion-label>
-      <ion-input type="number" [(ngModel)]="material.minQty" name="minQty" required></ion-input>
-    </ion-item>
-
-    <ion-button expand="block" type="submit">บันทึก</ion-button>
-  </form>
-</ion-content> -->

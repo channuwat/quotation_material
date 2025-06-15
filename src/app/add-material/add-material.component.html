@@ -25,13 +25,23 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">จำนวนคงเหลือ</ion-label>
-      <ion-input type="number" [(ngModel)]="material.stockQty" name="stockQty" required></ion-input>
+      <ion-label position="stacked">หมวดหมู่วัตถุดิบ</ion-label>
+      <ion-select [(ngModel)]="material.category" name="category" required>
+        <ion-select-option value="เนื้อสัตว์">เนื้อสัตว์</ion-select-option>
+        <ion-select-option value="เครื่องปรุง">เครื่องปรุง</ion-select-option>
+        <ion-select-option value="ผัก">ผัก</ion-select-option>
+        <ion-select-option value="เครื่องดื่ม">เครื่องดื่ม</ion-select-option>
+        <ion-select-option value="แป้งและข้าว">แป้งและข้าว</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">จำนวนขั้นต่ำ</ion-label>
-      <ion-input type="number" [(ngModel)]="material.minQty" name="minQty" required></ion-input>
+      <ion-label position="stacked">ที่จัดเก็บสต๊อก</ion-label>
+      <ion-select [(ngModel)]="material.storageLocation" name="storageLocation" required>
+        <ion-select-option value="ถังหน้าร้าน">ถังหน้าร้าน</ion-select-option>
+        <ion-select-option value="ตู้แช่">ตู้แช่</ion-select-option>
+        <ion-select-option value="บาร์น้ำ">ถังบาร์น้ำ</ion-select-option>
+      </ion-select>
     </ion-item>
 
     <ion-button expand="block" type="submit" [disabled]="!materialForm.form.valid">
