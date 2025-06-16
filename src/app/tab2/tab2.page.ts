@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { getDatabase, onValue, push, ref, set } from 'firebase/database';
+import { getDatabase, onValue, push, ref, set, update } from 'firebase/database';
 import { FirevabseService } from '../services/firevabse.service';
 
 @Component({
@@ -10,11 +10,13 @@ import { FirevabseService } from '../services/firevabse.service';
 })
 export class Tab2Page {
 
-  constructor(public fb:FirevabseService) {
+  constructor(public fb: FirevabseService) {
 
   }
 
-  groupedMaterials: { [category: string]: any[] } = {};
+  groupBy: 'type' | 'category' | 'status' | 'storageLocation' = 'category';
+  allMaterials: any[] = [];
+  groupedMaterials: { [key: string]: any[] } = {};
 
   ngOnInit() {
     const db = getDatabase();
@@ -22,20 +24,65 @@ export class Tab2Page {
 
     onValue(materialsRef, (snapshot) => {
       const data = snapshot.val();
-      const grouped: { [category: string]: any[] } = {};
+      const materials: any[] = [];
 
       if (data) {
         for (const key in data) {
-          const item = { id: key, ...data[key] };
-          const category = item.category || 'ไม่ระบุหมวดหมู่';
-          if (!grouped[category]) {
-            grouped[category] = [];
-          }
-          grouped[category].push(item);
+          materials.push({ id: key, ...data[key] });
         }
       }
 
-      this.groupedMaterials = grouped;
+      this.allMaterials = materials;
+      this.groupMaterials();
+    });
+  }
+
+  groupMaterials() {
+    const grouped: { [key: string]: any[] } = {};
+
+    for (const item of this.allMaterials) {
+      switch (item[this.groupBy]) {
+        case "purchase":
+          item[this.groupBy] = "สั่งซื้อ 🛒";
+          break;
+        case "reorder":
+          item[this.groupBy] = "เติมสต็อก 📥";
+          break;
+        case "empty":
+          item[this.groupBy] = "ไม่มีสต็อก ❌";
+          break;
+        case "low":
+          item[this.groupBy] = "เหลือน้อย ⚠️";
+          break;
+        case "full":
+          item[this.groupBy] = "เต็ม ✅";
+          break;
+        default: item[this.groupBy] ?? 'ไม่ระบุ';
+          break;
+      }
+
+      const key = item[this.groupBy] || 'ไม่ระบุ';
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+
+      grouped[key].push(item);
+    }
+
+    this.groupedMaterials = grouped;
+  }
+
+  updateStatus(material: any) {
+    const db = getDatabase();
+    const itemRef = ref(db, `materials/${material.id}`);
+
+    update(itemRef, {
+      status: material.status,
+      lastUpdated: new Date().toISOString()
+    }).then(() => {
+      console.log(`📦 อัปเดตสถานะของ ${material.name} → ${material.status}`);
+    }).catch((err) => {
+      console.error('❌ Error updating status:', err);
     });
   }
 }
