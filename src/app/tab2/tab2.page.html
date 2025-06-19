@@ -1,3 +1,4 @@
+<!-- material-list.page.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>รายการวัตถุดิบ</ion-title>
@@ -5,52 +6,70 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- 👇 เลือกการจัดกลุ่ม -->
+  <!-- เลือกการจัดกลุ่ม -->
   <ion-segment mode="ios" [(ngModel)]="groupBy" (ionChange)="groupMaterials()">
-    <ion-segment-button value="type">
-      <ion-label>ประเภท</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="category">
-      <ion-label>หมวดหมู่</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="storageLocation">
-      <ion-label>ที่จัดเก็บ</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="status">
-      <ion-label>สถานะ</ion-label>
-    </ion-segment-button>
+    <ion-segment-button value="type"><ion-label>ประเภท</ion-label></ion-segment-button>
+    <ion-segment-button value="category"><ion-label>หมวดหมู่</ion-label></ion-segment-button>
+    <ion-segment-button value="storageLocation"><ion-label>ที่จัดเก็บ</ion-label></ion-segment-button>
+    <ion-segment-button value="status"><ion-label>สถานะ</ion-label></ion-segment-button>
   </ion-segment>
 
-  <!-- 👇 แสดงข้อมูลที่จัดกลุ่มแล้ว -->
+  <!-- แสดงข้อมูลที่จัดกลุ่มแล้ว -->
   <ng-container *ngIf="groupedMaterials | keyvalue as groups">
     <div *ngFor="let group of groups">
       <ion-text color="medium">
-        <h3 class="ion-padding-top">{{ group.key }}</h3>
+        <!-- <h3 class="ion-padding-top">{{StatusTitle.includes(group.key)}}</h3> -->
+        <h3 class="ion-padding-top">{{StatusTitle(group.key)}}</h3>
       </ion-text>
 
       <ion-list mode="ios">
-        <ion-item *ngFor="let m of group.value">
-          <ion-label>
-            <h3>{{ m.name }} ({{ m.unit }})</h3>
-            <ion-segment [(ngModel)]="m.status" (ionChange)="updateStatus(m)" mode="ios">
-              <ion-segment-button [value]="'หมด'">
-                <ion-label color="danger">หมด</ion-label>
-              </ion-segment-button>
-              <ion-segment-button [value]="'เหลือน้อย'">
-                <ion-label color="warning">เหลือน้อย</ion-label>
-              </ion-segment-button>
-              <ion-segment-button [value]="'เต็ม'">
-                <ion-label color="success">เต็ม</ion-label>
-              </ion-segment-button>
-            </ion-segment>
-          </ion-label>
+        <ion-item *ngFor="let m of group.value" lines="full">
+          <ion-grid>
+            <ion-row>
+              <!-- ข้อมูลหลัก -->
+              <ion-col size="6">
+                <h3>{{ m.name }} ({{ m.unit }})</h3>
+                <p>ปริมาณที่ใช้ผูกสูตร</p>
+              </ion-col>
+
+              <!-- ช่องกรอก unitSubQty และปุ่มอัพเดท -->
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label position="stacked">หน่วยย่อย ({{ m.unitSub }})</ion-label>
+                  <ion-input type="number" mode="ios" [(ngModel)]="m.unitSubQty"></ion-input>
+                </ion-item>
+                <ion-button expand="block" size="small" (click)="updateItem(m)">
+                  อัพเดท
+                </ion-button>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <!-- สถานะ เปลี่ยนได้ด้วย ion-segment -->
+              <ion-col>
+                <ion-segment [(ngModel)]="m.status" (ionChange)="updateStatus(m)" mode="ios">
+                  <ion-segment-button value="empty">
+                    <ion-label color="danger">หมด</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="low">
+                    <ion-label color="warning">เหลือน้อย</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="full">
+                    <ion-label color="success">เต็ม</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-item>
       </ion-list>
     </div>
-    <ion-fab horizontal="end" vertical="bottom" slot="fixed" routerLink="add-material">
+  </ng-container>
+
+  <!-- ปุ่มเพิ่มรายการ -->
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" routerLink="add-material">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  </ng-container>
 </ion-content>

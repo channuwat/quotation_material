@@ -39,25 +39,25 @@ export class AddMaterialComponent implements OnInit {
 
 
   async ngOnInit() {
-    if (!getApps().length) {
-      initializeApp(environment.firebase);
-    }
+    // if (!getApps().length) {
+    //   initializeApp(environment.firebase);
+    // }
 
-    const db = getDatabase();
-    const materialsRef = ref(db, 'materials');
+    // const db = getDatabase();
+    // const materialsRef = ref(db, 'materials');
 
-    for (const item of this.sampleMaterials) {
-      const completeItem = {
-        ...item,
-        // needToReorder: item.stockQty < item.minQty,
-        lastUpdated: new Date().toISOString()
-      };
+    // for (const item of this.sampleMaterials) {
+    //   const completeItem = {
+    //     ...item,
+    //     // needToReorder: item.stockQty < item.minQty,
+    //     lastUpdated: new Date().toISOString()
+    //   };
 
-      const newRef = push(materialsRef);
-      await set(newRef, completeItem);
-    }
+    //   const newRef = push(materialsRef);
+    //   await set(newRef, completeItem);
+    // }
 
-    console.log('✅ อัปโหลดตัวอย่างเสร็จแล้ว');
+    // console.log('✅ อัปโหลดตัวอย่างเสร็จแล้ว');
   }
 
   material = {
