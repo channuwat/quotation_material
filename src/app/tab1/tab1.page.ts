@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FirevabseService } from '../services/firevabse.service';
+import { getDatabase, onValue, ref, remove, update } from 'firebase/database';
 
 @Component({
   selector: 'app-tab1',
@@ -24,6 +25,44 @@ export class Tab1Page {
     // fb.listenData('materials', (data) => {
     //   console.log('Data received:', data);
     // });
+  }
+
+  cartItems: any[] = [];
+
+  ngOnInit() {
+    this.loadCart();
+  }
+
+  loadCart() {
+    const db = getDatabase();
+    const cartRef = ref(db, 'cart');
+
+    onValue(cartRef, snapshot => {
+      const data = snapshot.val();
+      this.cartItems = [];
+
+      if (data) {
+        for (const key in data) {
+          this.cartItems.push({
+            id: key,
+            ...data[key]
+          });
+        }
+      }
+    });
+  }
+
+  async updateQty(item: any, delta: number) {
+    const db = getDatabase();
+    const itemRef = ref(db, `cart/${item.id}`);
+    const newQty = item.qty + delta;
+
+    if (newQty > 0) {
+      await update(itemRef, { qty: newQty });
+    } else {
+      // ลบสินค้าถ้าจำนวนเหลือ 0
+      await remove(itemRef);
+    }
   }
 
 }
