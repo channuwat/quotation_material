@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { getDatabase, onValue, push, ref, set, update } from 'firebase/database';
+import { get, getDatabase, onValue, push, ref, set, update } from 'firebase/database';
 import { FirevabseService } from '../services/firevabse.service';
+import { ToastController } from '@ionic/angular';
 
 interface Material {
   id: string;
@@ -23,7 +24,7 @@ interface Material {
 })
 export class Tab2Page {
 
-  constructor(public fb: FirevabseService) {
+  constructor(public fb: FirevabseService, private toastCtrl: ToastController) {
 
   }
 
@@ -110,5 +111,41 @@ export class Tab2Page {
     const itemRef = ref(db, `materials/${material.id}`);
     update(itemRef, { unitSubQty: material.unitSubQty, lastUpdated: new Date().toISOString() })
       .then(() => console.log(`อัปเดท ${material.name} unitSubQty → ${material.unitSubQty}`));
+  }
+
+   async addToCart(material: any) {
+    const db = getDatabase(); // สร้างอ้างอิงไปยัง Realtime DB
+    const cartRef = ref(db, `cart/${material.id}`); // ใช้ id เป็น key
+
+    try {
+      const snapshot = await get(cartRef);
+
+      if (!snapshot.exists()) {
+        // ถ้าไม่มี → เพิ่มเข้า cart
+        await set(cartRef, {
+          name: material.name,
+          unitSub: material.unitSub,
+          qty: 1,
+          addedAt: Date.now()
+        });
+
+        this.presentToast('✅ เพิ่มลงตะกร้าแล้ว');
+      } else {
+        this.presentToast('⚠️ รายการนี้มีในตะกร้าแล้ว');
+      }
+    } catch (error) {
+      console.error('❌ Error accessing cart:', error);
+      this.presentToast('เกิดข้อผิดพลาดในการเข้าถึงตะกร้า');
+    }
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      color: 'primary',
+      position: 'bottom'
+    });
+    toast.present();
   }
 }
