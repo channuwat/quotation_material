@@ -24,6 +24,10 @@ const routes: Routes = [
         loadChildren: () => import('../add-material/add-material.module').then(m => m.AddMaterialModule)
       },
       {
+        path: 'material-menu',
+        loadChildren: () => import('../material-menu/material-menu.module').then(m => m.MaterialMenuPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'

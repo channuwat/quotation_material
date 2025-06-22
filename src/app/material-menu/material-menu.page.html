@@ -1,0 +1,35 @@
+<ion-header mode="ios">
+  <ion-toolbar>
+    <ion-title>เมนูระบบ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen>
+
+  <ion-list lines="full" class="ion-no-margin ion-no-padding" mode="ios">
+    <ion-item button routerLink="/materials-management">
+      <ion-icon name="pricetag" slot="start"></ion-icon>
+      <ion-label>
+        <h2>อัปเดตราคาและปริมาณวัตถุดิบ</h2>
+        <p>แก้ไขข้อมูลที่ใช้คำนวณต้นทุนอาหาร</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item button routerLink="/stock-status">
+      <ion-icon name="cube" slot="start"></ion-icon>
+      <ion-label>
+        <h2>อัปเดตสถานะสต๊อก</h2>
+        <p>ตรวจสอบปริมาณและสถานะคลังสินค้า</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item button routerLink="/recipe-management">
+      <ion-icon name="restaurant" slot="start"></ion-icon>
+      <ion-label>
+        <h2>สูตรอาหาร</h2>
+        <p>จัดการสูตรและวัตถุดิบประกอบเมนู</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
