@@ -9,6 +9,10 @@ const routes: Routes = [
     component: MaterialMenuPage
   },
   {
+    path: 'add-material',
+    loadChildren: () => import('./add-material/add-material.module').then(m => m.AddMaterialModule)
+  },
+  {
     path: 'materials-management',
     loadChildren: () => import('./materials-management/materials-management.module').then(m => m.MaterialsManagementPageModule)
   },

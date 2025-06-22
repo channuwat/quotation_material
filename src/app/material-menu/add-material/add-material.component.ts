@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { IonButton, IonHeader, IonItem, IonInput } from "@ionic/angular/standalone";
 import { getApps, initializeApp } from 'firebase/app';
 import { getDatabase, push, ref, set } from 'firebase/database';
+import { FirevabseService } from 'src/app/services/firevabse.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -34,7 +37,18 @@ export class AddMaterialComponent implements OnInit {
     { name: 'แป้งทอดกรอบ', unit: 'กก.', unitSub: 'ก.', weightQty: 1000, type: 'reorder', category: 'แป้งและข้าว', price: 22, storageLocation: 'ถังหน้าร้าน' }
   ];
 
-  constructor() {
+  materialForm: FormGroup;
+
+  constructor(private navCtrl: NavController, public fb: FirevabseService, private formB: FormBuilder) {
+    this.materialForm = this.formB.group({
+      name: ['', Validators.required],
+      unit: ['', Validators.required],
+      unitSub: ['', Validators.required],
+      price: [null, [Validators.required, Validators.min(1)]],
+      qty: [null, [Validators.required, Validators.min(0)]],
+      status: ['full', Validators.required],
+      storageLocation: ['หน้าร้าน', Validators.required]
+    });
   }
 
 
@@ -60,27 +74,30 @@ export class AddMaterialComponent implements OnInit {
     // console.log('✅ อัปโหลดตัวอย่างเสร็จแล้ว');
   }
 
-  material = {
-    name: '',
-    unit: '',
-    type: '',
-    category: '',
-    storageLocation: ''
+  material: any = {
+    name: null,
+    unit: null,
+    unitSub: null,
+    price: null,
+    qty: null,
+    status: 'full',
+    storageLocation: null
   };
 
   async addMaterial() {
+    if (this.materialForm.invalid) {
+      this.materialForm.markAllAsTouched();
+      return;
+    }
 
-    // const db = getDatabase();
-    // const materialsRef = ref(db, 'materials');
-    // const newRef = push(materialsRef);
-
-    // await set(newRef, {
-    //   ...this.material,
-    //   lastUpdated: new Date().toISOString()
-    // });
-
-    // alert('✅ เพิ่มวัตถุดิบเรียบร้อยแล้ว');
-    // this.material = { name: '', unit: '', type: '', category: '', storageLocation: '' };
+    try {
+      await this.fb.pushData('materials', this.material);
+      alert('✅ เพิ่มวัตถุดิบเรียบร้อยแล้ว');
+      this.navCtrl.back(); // กลับหน้าเดิม
+    } catch (error) {
+      console.error('❌ เกิดข้อผิดพลาด:', error);
+      alert('เกิดข้อผิดพลาดในการเพิ่มวัตถุดิบ');
+    }
   }
 
 }

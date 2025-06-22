@@ -1,0 +1,58 @@
+<ion-header mode="ios">
+  <ion-toolbar>
+    <ion-title>เพิ่มวัตถุดิบ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen mode="ios">
+  <form [formGroup]="materialForm" (ngSubmit)="addMaterial()">
+    <ion-list mode="ios" >
+      <ion-item>
+        <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
+        <ion-input mode="ios" formControlName="name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">หน่วยหลัก</ion-label>
+        <ion-input mode="ios" formControlName="unit" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">หน่วยย่อย</ion-label>
+        <ion-input mode="ios" formControlName="unitSub" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ราคา (บาท)</ion-label>
+        <ion-input mode="ios" type="number" formControlName="price" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ปริมาณ</ion-label>
+        <ion-input mode="ios" type="number" formControlName="qty" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">สถานะสต๊อก</ion-label>
+        <ion-select interface="popover" mode="ios" formControlName="status" required>
+          <ion-select-option value="empty">หมด</ion-select-option>
+          <ion-select-option value="low">เหลือน้อย</ion-select-option>
+          <ion-select-option value="full">เต็ม</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">สถานที่เก็บ</ion-label>
+        <ion-select interface="popover" mode="ios" formControlName="storageLocation" required>
+          <ion-select-option value="หน้าร้าน">หน้าร้าน</ion-select-option>
+          <ion-select-option value="ตู้แช่">ตู้แช่</ion-select-option>
+          <ion-select-option value="บาร์น้ำ">บาร์น้ำ</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="materialForm.invalid" class="ion-margin-top">
+      บันทึกวัตถุดิบ
+    </ion-button>
+  </form>
+</ion-content>

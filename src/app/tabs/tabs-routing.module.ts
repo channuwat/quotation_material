@@ -20,10 +20,6 @@ const routes: Routes = [
         loadChildren: () => import('../tab3/tab3.module').then(m => m.Tab3PageModule)
       },
       {
-        path: 'add-material',
-        loadChildren: () => import('../add-material/add-material.module').then(m => m.AddMaterialModule)
-      },
-      {
         path: 'material-menu',
         loadChildren: () => import('../material-menu/material-menu.module').then(m => m.MaterialMenuPageModule)
       },
