@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FirevabseService } from '../services/firevabse.service';
 import { getDatabase, onValue, ref, remove, update } from 'firebase/database';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-tab1',
@@ -63,6 +64,20 @@ export class Tab1Page {
       // ลบสินค้าถ้าจำนวนเหลือ 0
       await remove(itemRef);
     }
+  }
+
+  async exportToImage() {
+    const element = document.getElementById('invoice');
+    if (!element) return;
+
+    const canvas = await html2canvas(element);
+    const image = canvas.toDataURL('image/png');
+
+    // ดาวน์โหลด
+    const link = document.createElement('a');
+    link.href = image;
+    link.download = 'ใบสั่งซื้อ.png';
+    link.click();
   }
 
 }
