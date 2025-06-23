@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FirevabseService } from 'src/app/services/firevabse.service';
 
 @Component({
   selector: 'app-materials-management',
@@ -8,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MaterialsManagementPage implements OnInit {
 
-  constructor() { }
+  constructor(private fb: FirevabseService) { }
+
+  materials: any[] = [];
 
   ngOnInit() {
   }
+
+  ionViewWillEnter() {
+    this.materials = [];
+    this.loadMaterials();
+  }
+
+  loadMaterials() {
+    this.fb.listenData('materials', (data: any[]) => {
+      for (const key in data) {
+        this.materials.push({ id: key, ...data[key] });
+      }
+    })
+  }
+
+  
 
 }

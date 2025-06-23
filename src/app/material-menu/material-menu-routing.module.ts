@@ -25,12 +25,6 @@ const routes: Routes = [
     redirectTo: '/tabs/materials-management',
     pathMatch: 'full'
   },
-  {
-    path: 'stock-status',
-    loadChildren: () => import('./material-menu.module').then( m => m.MaterialMenuPageModule)
-  }
-
-
 ];
 
 @NgModule({

@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>แก้ไขวัตถุดิบ</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="materialForm" (ngSubmit)="updateMaterial()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">หน่วยหลัก</ion-label>
+        <ion-input formControlName="unit"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">หน่วยย่อย</ion-label>
+        <ion-input formControlName="unitSub"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ราคา</ion-label>
+        <ion-input type="number" formControlName="price"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ปริมาณ</ion-label>
+        <ion-input type="number" formControlName="qty"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">สถานะ</ion-label>
+        <ion-select formControlName="status" interface="popover">
+          <ion-select-option value="empty">หมด</ion-select-option>
+          <ion-select-option value="low">เหลือน้อย</ion-select-option>
+          <ion-select-option value="full">เต็ม</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">สถานที่เก็บ</ion-label>
+        <ion-input formControlName="storageLocation"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" [disabled]="materialForm.invalid" type="submit" class="ion-margin-top">
+      อัปเดตวัตถุดิบ
+    </ion-button>
+
+    <ion-button expand="block" color="danger" fill="outline" class="ion-margin-top" (click)="confirmDelete()">
+      ลบวัตถุดิบ
+    </ion-button>
+  </form>
+</ion-content>
