@@ -36,7 +36,12 @@ export class EditMaterialPage implements OnInit {
 
   ngOnInit() {
     this.materialId = this.route.snapshot.paramMap.get('id')!;
-    this.loadMaterial();
+  }
+  
+  ionViewWillEnter(){
+    setTimeout(() => {
+      this.loadMaterial();
+    }, 500);
   }
 
   async loadMaterial() {
@@ -45,8 +50,8 @@ export class EditMaterialPage implements OnInit {
         if (data) {
           this.materialForm.patchValue(data);
         } else {
-          alert('ไม่พบข้อมูลวัตถุดิบ');
-          this.navCtrl.back();
+          console.log('ไม่พบข้อมูลวัตถุดิบ');
+          this.navCtrl.navigateBack('/tabs/material-menu/materials-management');;
         }
       } catch (error) {
         console.error('โหลดข้อมูลผิดพลาด', error);
@@ -90,16 +95,22 @@ export class EditMaterialPage implements OnInit {
   }
 
   async deleteMaterial() {
-    const db = getDatabase();
-    const matRef = ref(db, `materials/${this.materialId}`);
-
     try {
-      await remove(matRef);
-      alert('🗑️ ลบวัตถุดิบแล้ว');
-      this.navCtrl.back();
+      this.db.deleteData('materials/' + this.materialId)
     } catch (error) {
-      console.error('ลบล้มเหลว', error);
+      alert('❌ เกิดข้อผิดพลาดในการลบวัตถุดิบ');
     }
+
+    // const db = getDatabase();
+    // const matRef = ref(db, `materials/${this.materialId}`);
+
+    // try {
+    //   await remove(matRef);
+    //   alert('🗑️ ลบวัตถุดิบแล้ว');
+    //   this.navCtrl.back();
+    // } catch (error) {
+    //   console.error('ลบล้มเหลว', error);
+    // }
   }
 
 }

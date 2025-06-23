@@ -28,7 +28,4 @@ export class MaterialsManagementPage implements OnInit {
       }
     })
   }
-
-  
-
 }
