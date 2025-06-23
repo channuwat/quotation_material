@@ -30,7 +30,7 @@ export class EditMaterialPage implements OnInit {
       price: [null, [Validators.required, Validators.min(0)]],
       qty: [null, [Validators.required, Validators.min(0)]],
       status: ['full', Validators.required],
-      storageLocation: ['', Validators.required]
+      storage: ['', Validators.required]
     });
   }
 

@@ -6,7 +6,7 @@
 
 <ion-content class="ion-padding">
   <form [formGroup]="materialForm" (ngSubmit)="updateMaterial()">
-    <ion-list>
+    <ion-list mode="ios">
       <ion-item>
         <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
         <ion-input formControlName="name"></ion-input>
@@ -34,7 +34,7 @@
 
       <ion-item>
         <ion-label position="stacked">สถานะ</ion-label>
-        <ion-select formControlName="status" interface="popover">
+        <ion-select formControlName="status" mode="ios" interface="popover">
           <ion-select-option value="empty">หมด</ion-select-option>
           <ion-select-option value="low">เหลือน้อย</ion-select-option>
           <ion-select-option value="full">เต็ม</ion-select-option>
@@ -43,7 +43,11 @@
 
       <ion-item>
         <ion-label position="stacked">สถานที่เก็บ</ion-label>
-        <ion-input formControlName="storageLocation"></ion-input>
+        <ion-select interface="popover" mode="ios" formControlName="storage" required>
+          <ion-select-option value="หน้าร้าน">หน้าร้าน</ion-select-option>
+          <ion-select-option value="ตู้แช่">ตู้แช่</ion-select-option>
+          <ion-select-option value="บาร์น้ำ">บาร์น้ำ</ion-select-option>
+        </ion-select>
       </ion-item>
     </ion-list>
 

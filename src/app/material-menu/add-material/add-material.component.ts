@@ -48,7 +48,7 @@ export class AddMaterialComponent implements OnInit {
       price: [null, [Validators.required, Validators.min(1)]],
       qty: [null, [Validators.required, Validators.min(0)]],
       status: ['full', Validators.required],
-      storageLocation: ['หน้าร้าน', Validators.required],
+      storage: ['หน้าร้าน', Validators.required],
       timestamp: [new Date().toISOString()]
     });
   }
@@ -83,7 +83,7 @@ export class AddMaterialComponent implements OnInit {
     price: null,
     qty: null,
     status: 'full',
-    storageLocation: null
+    storage: null
   };
 
   async addMaterial() {
