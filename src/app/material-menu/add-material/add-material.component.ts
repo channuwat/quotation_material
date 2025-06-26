@@ -16,26 +16,26 @@ import { environment } from 'src/environments/environment';
 })
 export class AddMaterialComponent implements OnInit {
   public sampleMaterials = [
-    { name: "น้ำปลา", unit: "ขวด", unitSub: "มล.", price: 25, qty: 10, status: "full", storage: "ชั้นบน", createdAt: 1721412688000 },
-    { name: "ซีอิ๊ว", unit: "ขวด", unitSub: "มล.", price: 20, qty: 5, status: "low", storage: "ชั้นบน", createdAt: 1721412689000 },
-    { name: "ซอสหอย", unit: "ขวด", unitSub: "มล.", price: 30, qty: 0, status: "empty", storage: "ตู้เย็น", createdAt: 1721412690000 },
-    { name: "น้ำตาล", unit: "กิโลกรัม", unitSub: "กรัม", price: 18, qty: 8, status: "full", storage: "ห้องแห้ง", createdAt: 1721412691000 },
-    { name: "เกลือ", unit: "กิโลกรัม", unitSub: "กรัม", price: 10, qty: 1, status: "low", storage: "ห้องแห้ง", createdAt: 1721412692000 },
-    { name: "พริกป่น", unit: "ถุง", unitSub: "กรัม", price: 15, qty: 0, status: "empty", storage: "ตู้ลิ้นชัก", createdAt: 1721412693000 },
-    { name: "น้ำมันพืช", unit: "ลิตร", unitSub: "มล.", price: 35, qty: 4, status: "full", storage: "ชั้นล่าง", createdAt: 1721412694000 },
-    { name: "กระเทียม", unit: "กิโลกรัม", unitSub: "กรัม", price: 40, qty: 3, status: "low", storage: "ห้องแห้ง", createdAt: 1721412695000 },
-    { name: "หอมแดง", unit: "กิโลกรัม", unitSub: "กรัม", price: 35, qty: 0, status: "empty", storage: "ห้องแห้ง", createdAt: 1721412696000 },
-    { name: "ไข่ไก่", unit: "แผง", unitSub: "ฟอง", price: 90, qty: 2, status: "low", storage: "ตู้เย็น", createdAt: 1721412697000 },
-    { name: "ขิง", unit: "กิโลกรัม", unitSub: "กรัม", price: 50, qty: 6, status: "full", storage: "ตู้เย็น", createdAt: 1721412698000 },
-    { name: "ตะไคร้", unit: "กิโลกรัม", unitSub: "กรัม", price: 25, qty: 1, status: "low", storage: "ตู้เย็น", createdAt: 1721412699000 },
-    { name: "ใบมะกรูด", unit: "กรัม", unitSub: "กรัม", price: 5, qty: 0, status: "empty", storage: "ตู้เย็น", createdAt: 1721412700000 },
-    { name: "มะนาว", unit: "กิโลกรัม", unitSub: "ลูก", price: 60, qty: 5, status: "full", storage: "ตู้เย็น", createdAt: 1721412701000 },
-    { name: "น้ำมะขาม", unit: "ถุง", unitSub: "มล.", price: 22, qty: 3, status: "low", storage: "ชั้นบน", createdAt: 1721412702000 },
-    { name: "พริกไทย", unit: "ถุง", unitSub: "กรัม", price: 28, qty: 0, status: "empty", storage: "ตู้ลิ้นชัก", createdAt: 1721412703000 },
-    { name: "ซอสพริก", unit: "ขวด", unitSub: "มล.", price: 27, qty: 7, status: "full", storage: "ชั้นบน", createdAt: 1721412704000 },
-    { name: "ซอสมะเขือเทศ", unit: "ขวด", unitSub: "มล.", price: 27, qty: 2, status: "low", storage: "ชั้นบน", createdAt: 1721412705000 },
-    { name: "แครอท", unit: "กิโลกรัม", unitSub: "กรัม", price: 33, qty: 0, status: "empty", storage: "ตู้เย็น", createdAt: 1721412706000 },
-    { name: "เนื้อหมู", unit: "กิโลกรัม", unitSub: "กรัม", price: 150, qty: 5, status: "full", storage: "แช่แข็ง", createdAt: 1721412707000 }
+    { name: "น้ำปลา", unit: "ขวด", unitSub: "มล.", price: 25, qty: 10, yieldPercent: 80, status: "full", storage: "ชั้นบน", createdAt: 1721412688000 },
+  { name: "ซีอิ๊วดำ", unit: "ขวด", unitSub: "มล.", price: 20, qty: 8, yieldPercent: 90, status: "low", storage: "ชั้นล่าง", createdAt: 1721412698000 },
+  { name: "น้ำตาลทราย", unit: "กก.", unitSub: "กรัม", price: 30, qty: 5, yieldPercent: 100, status: "full", storage: "ห้องแห้ง", createdAt: 1721412708000 },
+  { name: "เกลือ", unit: "กก.", unitSub: "กรัม", price: 15, qty: 3, yieldPercent: 100, status: "full", storage: "ห้องแห้ง", createdAt: 1721412718000 },
+  { name: "พริกป่น", unit: "กก.", unitSub: "กรัม", price: 80, qty: 2, yieldPercent: 95, status: "low", storage: "ห้องแห้ง", createdAt: 1721412728000 },
+  { name: "น้ำส้มสายชู", unit: "ขวด", unitSub: "มล.", price: 18, qty: 4, yieldPercent: 98, status: "full", storage: "ชั้นบน", createdAt: 1721412738000 },
+  { name: "ต้นหอม", unit: "กำ", unitSub: "กรัม", price: 12, qty: 7, yieldPercent: 70, status: "full", storage: "ตู้เย็น", createdAt: 1721412748000 },
+  { name: "ผักชี", unit: "กำ", unitSub: "กรัม", price: 14, qty: 5, yieldPercent: 65, status: "low", storage: "ตู้เย็น", createdAt: 1721412758000 },
+  { name: "กระเทียม", unit: "กก.", unitSub: "กรัม", price: 40, qty: 6, yieldPercent: 85, status: "full", storage: "ห้องแห้ง", createdAt: 1721412768000 },
+  { name: "หอมแดง", unit: "กก.", unitSub: "กรัม", price: 45, qty: 4, yieldPercent: 80, status: "low", storage: "ห้องแห้ง", createdAt: 1721412778000 },
+  { name: "ขิง", unit: "กก.", unitSub: "กรัม", price: 38, qty: 3, yieldPercent: 75, status: "empty", storage: "ตู้เย็น", createdAt: 1721412788000 },
+  { name: "ใบมะกรูด", unit: "แพ็ค", unitSub: "ใบ", price: 10, qty: 2, yieldPercent: 60, status: "empty", storage: "ตู้เย็น", createdAt: 1721412798000 },
+  { name: "ตะไคร้", unit: "กก.", unitSub: "กรัม", price: 22, qty: 3, yieldPercent: 70, status: "low", storage: "ตู้เย็น", createdAt: 1721412808000 },
+  { name: "ข่า", unit: "กก.", unitSub: "กรัม", price: 28, qty: 2, yieldPercent: 65, status: "low", storage: "ตู้เย็น", createdAt: 1721412818000 },
+  { name: "กะทิกล่อง", unit: "กล่อง", unitSub: "มล.", price: 25, qty: 6, yieldPercent: 100, status: "full", storage: "ชั้นล่าง", createdAt: 1721412828000 },
+  { name: "น้ำมันพืช", unit: "ขวด", unitSub: "มล.", price: 45, qty: 8, yieldPercent: 100, status: "full", storage: "ชั้นล่าง", createdAt: 1721412838000 },
+  { name: "หมูบด", unit: "กก.", unitSub: "กรัม", price: 120, qty: 5, yieldPercent: 85, status: "full", storage: "ช่องแข็ง", createdAt: 1721412848000 },
+  { name: "ไก่สับ", unit: "กก.", unitSub: "กรัม", price: 110, qty: 4, yieldPercent: 80, status: "low", storage: "ช่องแข็ง", createdAt: 1721412858000 },
+  { name: "ไข่ไก่", unit: "แผง", unitSub: "ฟอง", price: 90, qty: 3, yieldPercent: 100, status: "full", storage: "ชั้นบน", createdAt: 1721412868000 },
+  { name: "แครอท", unit: "กก.", unitSub: "กรัม", price: 35, qty: 4, yieldPercent: 75, status: "full", storage: "ตู้เย็น", createdAt: 1721412878000 },
   ];
 
   materialForm: FormGroup;
@@ -49,6 +49,7 @@ export class AddMaterialComponent implements OnInit {
       qty: [null, [Validators.required, Validators.min(0)]],
       status: ['full', Validators.required],
       storage: ['หน้าร้าน', Validators.required],
+      yieldPercent: [100,[Validators.required, Validators.min(0), Validators.max(100)]],
       timestamp: [new Date().toISOString()]
     });
   }
@@ -82,6 +83,7 @@ export class AddMaterialComponent implements OnInit {
     unitSub: null,
     price: null,
     qty: null,
+    yieldPercent: 100,
     status: 'full',
     storage: null
   };

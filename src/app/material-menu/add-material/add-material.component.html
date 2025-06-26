@@ -6,7 +6,7 @@
 
 <ion-content class="ion-padding" fullscreen mode="ios">
   <form [formGroup]="materialForm" (ngSubmit)="addMaterial()">
-    <ion-list mode="ios" >
+    <ion-list mode="ios">
       <ion-item>
         <ion-label position="stacked">ชื่อวัตถุดิบ</ion-label>
         <ion-input mode="ios" formControlName="name" required></ion-input>
@@ -30,6 +30,11 @@
       <ion-item>
         <ion-label position="stacked">ปริมาณ</ion-label>
         <ion-input mode="ios" type="number" formControlName="qty" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ค่า Yield (%)</ion-label>
+        <ion-input type="number" formControlName="yieldPercent" min="0" max="100" required></ion-input>
       </ion-item>
 
       <ion-item>

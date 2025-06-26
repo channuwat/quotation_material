@@ -29,6 +29,7 @@ export class EditMaterialPage implements OnInit {
       unitSub: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
       qty: [null, [Validators.required, Validators.min(0)]],
+      yieldPercent: [100,[Validators.required, Validators.min(0), Validators.max(100)]],
       status: ['full', Validators.required],
       storage: ['', Validators.required]
     });

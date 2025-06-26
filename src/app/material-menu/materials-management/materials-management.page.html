@@ -12,8 +12,10 @@
     <ion-item *ngFor="let m of filteredMaterials" [routerLink]="['./edit-material', m.id]">
       <ion-label>
         <h2>{{ m.name }} ({{m.unit}})</h2>
-        <p>ปริมาณ: {{ m.qty }} {{ m.unitSub }}</p>
         <p>ราคาซื้อ: {{ m.price | number }} บาท</p>
+        <p>ปริมาณ: {{ m.qty }} {{ m.unitSub }}</p>
+        <p><strong>ค่า Yield:</strong> {{ m.yieldPercent }}%</p>
+        <p>ปริมาณใช้ได้จริง: {{ (m.qty * (m.yieldPercent / 100)) | number:'1.2-2' }} {{ m.unitSub }}</p>
         <p>สถานที่จัดเก็บ: {{ m.storage }}</p>
       </ion-label>
       <ion-icon name="create-outline" slot="end"></ion-icon>

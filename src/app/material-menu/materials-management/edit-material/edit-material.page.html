@@ -33,6 +33,11 @@
       </ion-item>
 
       <ion-item>
+        <ion-label position="stacked">ค่า Yield (%)</ion-label>
+        <ion-input type="number" formControlName="yieldPercent" min="0" max="100" required></ion-input>
+      </ion-item>
+
+      <ion-item>
         <ion-label position="stacked">สถานะ</ion-label>
         <ion-select formControlName="status" mode="ios" interface="popover">
           <ion-select-option value="empty">หมด</ion-select-option>
