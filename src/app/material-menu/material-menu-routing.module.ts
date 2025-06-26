@@ -21,10 +21,19 @@ const routes: Routes = [
     loadChildren: () => import('./stock-status/stock-status.module').then(m => m.StockStatusPageModule)
   },
   {
+    path: 'calculate-recipe',
+    loadChildren: () => import('./calculate-materials/recipe/recipe-routing.module').then(m => m.RecipePageRoutingModule)
+  },
+  {
     path: '',
     redirectTo: '/tabs/materials-management',
     pathMatch: 'full'
   },
+  {
+    path: 'recipe',
+    loadChildren: () => import('./calculate-materials/recipe/recipe.module').then( m => m.RecipePageModule)
+  },
+
 ];
 
 @NgModule({

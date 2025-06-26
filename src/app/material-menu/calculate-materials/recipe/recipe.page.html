@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>คำนวณต้นทุนเมนู</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="recipeForm">
+    <ion-list formArrayName="ingredients">
+      <div *ngFor="let ing of ingredients.controls; let i = index" [formGroupName]="i">
+        <ion-item>
+          <ion-label>วัตถุดิบ</ion-label>
+          <ion-select interface="alert" placeholder="เลือกวัตถุดิบ"
+            (ionChange)="onMaterialChange(i, $event.detail.value)">
+            <ion-select-option *ngFor="let m of materialsList" [value]="m.id">
+              {{ m.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">ปริมาณที่ใช้</ion-label>
+          <ion-input type="number" formControlName="qty"></ion-input>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-label>หน่วย: {{ ing.value.unit || '-' }} | ราคา: {{ ing.value.pricePerUnit || 0 }} บาท</ion-label>
+        </ion-item>
+
+        <ion-button color="danger" fill="clear" size="small" (click)="ingredients.removeAt(i)">
+          ลบวัตถุดิบ
+        </ion-button>
+      </div>
+    </ion-list>
+
+    <ion-button expand="block" (click)="addIngredient()">+ เพิ่มวัตถุดิบ</ion-button>
+
+    <ion-item>
+      <ion-label position="stacked">ราคาขายหน้าร้าน</ion-label>
+      <ion-input type="number" formControlName="salePrice"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">ราคาขายเดลิเวอรี่</ion-label>
+      <ion-input type="number" formControlName="deliveryPrice"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">ค่าแก๊ส (%)</ion-label>
+      <ion-input type="number" formControlName="gasPercent"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">ค่า COG (%)</ion-label>
+      <ion-input type="number" formControlName="cogPercent"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" color="success" (click)="calculateCost()">คำนวณต้นทุน</ion-button>
+
+    <ion-card *ngIf="totalCost !== null">
+      <ion-card-header>
+        <ion-card-title>ผลลัพธ์</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>ต้นทุนรวม: {{ totalCost | number:'1.2-2' }} บาท</p>
+        <p>กำไร (หน้าร้าน): {{ profitSale | number:'1.2-2' }} บาท</p>
+        <p>กำไร (เดลิเวอรี่): {{ profitDelivery | number:'1.2-2' }} บาท</p>
+        <p>Margin: {{ margin | number:'1.0-2' }} %</p>
+      </ion-card-content>
+    </ion-card>
+  </form>
+</ion-content>
