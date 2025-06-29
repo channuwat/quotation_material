@@ -11,18 +11,22 @@ import { FirevabseService } from 'src/app/services/firevabse.service';
 })
 export class RecipePage implements OnInit {
   recipeForm = new FormGroup({
+    menuName: new FormControl(''),
     ingredients: new FormArray([]),
     salePrice: new FormControl(0),
     deliveryPrice: new FormControl(0),
-    gasPercent: new FormControl(10),
-    cogPercent: new FormControl(5),
+    gasPercent: new FormControl(5),
   });
 
   materialsList: any[] = [];
   totalCost: number = 0;
+  priceRecommend: number = 0;
+  priceDeliveryRecommend: number = 0;
+  productionCost: number = 0;
   profitSale = 0;
   profitDelivery = 0;
-  margin = 0;
+  COG = 0;
+  COGD = 0;
 
   constructor(private db: FirevabseService) {
 
@@ -38,12 +42,23 @@ export class RecipePage implements OnInit {
     // const materialsRef = ref(db, 'materials');
     this.db.listenData('materials', (data: any) => {
       if (data) {
+
         this.materialsList = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
         }));
+
+        this.materialsList.forEach((material: any) => {
+          let pricePerYield = this.calculateYieldPrice(material.price, material.yieldPercent);
+          material.pricePerYield = pricePerYield;
+        });
       }
     })
+  }
+
+  calculateYieldPrice(pricePerUnit: number, yieldPercent: number): number {
+    if (yieldPercent <= 0 || yieldPercent > 100) return 0; // ป้องกันหาร 0 หรือเกินจริง
+    return +(pricePerUnit / (yieldPercent / 100)).toFixed(2);
   }
 
   get ingredients(): FormArray {
@@ -58,6 +73,8 @@ export class RecipePage implements OnInit {
         pricePerUnit: new FormControl(0),
         unit: new FormControl(''),
         qty: new FormControl(0),
+        qtyUse: new FormControl(0),
+        pricePerYield: new FormControl(0),
       })
     );
   }
@@ -70,6 +87,8 @@ export class RecipePage implements OnInit {
         name: mat.name,
         unit: mat.unit,
         pricePerUnit: mat.price,
+        qty: mat.qty,
+        pricePerYield: mat.pricePerYield,
       });
     }
   }
@@ -77,14 +96,17 @@ export class RecipePage implements OnInit {
   calculateCost() {
     const form: any = this.recipeForm.value;
     const matCost = form.ingredients.reduce((sum: number, ing: any) => {
-      return sum + ing.qty * ing.pricePerUnit;
+      let pricePerYield = ing.pricePerYield / ing.qty
+      return sum + ing.qtyUse * pricePerYield;
     }, 0);
 
-    const gas = matCost * (form.gasPercent / 100);
-    const cog = matCost * (form.cogPercent / 100);
-    this.totalCost = matCost + gas + cog;
-    this.profitSale = form.salePrice - this.totalCost;
-    this.profitDelivery = form.deliveryPrice - this.totalCost;
-    this.margin = form.salePrice > 0 ? (this.profitSale / form.salePrice) * 100 : 0;
+    const gas = (matCost * (form.gasPercent / 100)) + matCost; // คำนวณต้นทุนรวมของวัตถุดิบและแก๊ส
+
+    this.productionCost = gas;
+    this.priceRecommend = gas * 2.5; // แนะนำราคาขาย 2.5 เท่าของต้นทุน(cog 40%))
+    this.priceDeliveryRecommend = this.priceRecommend * 1.6; // แนะนำราคาขายส่งเดลิเวอร์ลี่ 1.6 เท่าของราคาขาย
+    this.profitSale = form.salePrice - this.productionCost; // กำไรจากการขาย
+    this.profitDelivery = form.deliveryPrice - this.productionCost; // กำไรจากการขายส่งเดลิเวอร์ลี่
+    this.COG = this.productionCost / form.salePrice > 0 || 0 ? this.productionCost / form.salePrice : 0; // ต้นทุนขาย (COG) = ต้นทุนการผลิต / ราคาขาย
   }
 }
