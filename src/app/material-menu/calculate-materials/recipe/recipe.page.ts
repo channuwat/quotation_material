@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { NavController } from '@ionic/angular';
 import { getDatabase, onValue, ref } from 'firebase/database';
 import { FirevabseService } from 'src/app/services/firevabse.service';
 
@@ -28,7 +29,7 @@ export class RecipePage implements OnInit {
   COG = 0;
   COGD = 0;
 
-  constructor(private db: FirevabseService) {
+  constructor(private db: FirevabseService,private navCtrl : NavController) {
 
   }
 
@@ -42,12 +43,11 @@ export class RecipePage implements OnInit {
     // const materialsRef = ref(db, 'materials');
     this.db.listenData('materials', (data: any) => {
       if (data) {
-
         this.materialsList = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
         }));
-
+        
         this.materialsList.forEach((material: any) => {
           let pricePerYield = this.calculateYieldPrice(material.price, material.yieldPercent);
           material.pricePerYield = pricePerYield;
@@ -84,6 +84,7 @@ export class RecipePage implements OnInit {
     if (mat) {
       const row = this.ingredients.at(i) as FormGroup;
       row.patchValue({
+        materialId: mat.id,
         name: mat.name,
         unit: mat.unit,
         pricePerUnit: mat.price,
@@ -108,5 +109,42 @@ export class RecipePage implements OnInit {
     this.profitSale = form.salePrice - this.productionCost; // กำไรจากการขาย
     this.profitDelivery = form.deliveryPrice - this.productionCost; // กำไรจากการขายส่งเดลิเวอร์ลี่
     this.COG = this.productionCost / form.salePrice > 0 || 0 ? this.productionCost / form.salePrice : 0; // ต้นทุนขาย (COG) = ต้นทุนการผลิต / ราคาขาย
+  }
+
+  addMenu() {
+    const form: any = this.recipeForm.value;
+
+    // ตรวจสอบความถูกต้อง
+    if (!form.menuName || !form.ingredients.length) {
+      alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+      return;
+    }
+
+    // แปลงวัตถุดิบให้อยู่ในรูปแบบที่ต้องการ
+    const ingredients = form.ingredients.map((ing: any) => ({
+
+      materialId: ing.materialId,
+      usageQty: Number(ing.qtyUse)
+    }));
+
+    const newMenu = {
+      name: form.menuName,
+      gasCostPercent: Number(form.gasPercent),
+      priceInShop: Number(form.salePrice),
+      priceDelivery: Number(form.deliveryPrice),
+      ingredients: ingredients,
+      createdAt: Date.now()
+    };
+
+    this.db.pushData('menus', newMenu).then(() => {
+      alert('เพิ่มเมนูเรียบร้อยแล้ว');
+      this.recipeForm.reset();
+      this.ingredients.clear();
+      this.addIngredient(); // เพิ่มแถววัตถุดิบเปล่า 1 แถว
+      this.navCtrl.navigateForward('/tabs/materials-management/lists-recipe'); // นำทางไปยังหน้ารายการเมนู
+    }).catch((err) => {
+      console.error('Error adding menu:', err);
+      alert('เกิดข้อผิดพลาดในการเพิ่มเมนู');
+    })
   }
 }

@@ -94,7 +94,7 @@
         <p>กำไร (เดลิเวอรี่): {{ profitDelivery | number:'1.2-2' }} บาท</p>
 
         <p>COG: {{ COG*100 | number:'1.0-2' }} %</p>
-        <ion-button color="success" expand="block">สร้างเมนูใหม่</ion-button>
+        <ion-button color="success" expand="block" (click)="addMenu()">สร้างเมนูใหม่</ion-button>
       </ion-card-content>
     </ion-card>
   </form>

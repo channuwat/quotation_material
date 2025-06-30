@@ -29,7 +29,7 @@ const routes: Routes = [
     loadChildren: () => import('./calculate-materials/lists-recipe/lists-recipe.module').then(m => m.ListsRecipePageModule)
   },
   {
-    path: 'recipe',
+    path: 'add-recipe',
     loadChildren: () => import('./calculate-materials/recipe/recipe.module').then(m => m.RecipePageModule)
   },
   {
