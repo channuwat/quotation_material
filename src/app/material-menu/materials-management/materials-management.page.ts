@@ -27,8 +27,8 @@ export class MaterialsManagementPage implements OnInit {
   loadMaterials() {
     this.fb.listenData('materials', (data: any[]) => {
       for (const key in data) {
-        this.materials.push({ id: key, ...data[key] });
-      }
+       this.materials.push({ id: key, ...data[key] });
+      } 
 
       // ✅ สร้างตัวค้นหา fuse.js
       this.fuse = new Fuse(this.materials, {
