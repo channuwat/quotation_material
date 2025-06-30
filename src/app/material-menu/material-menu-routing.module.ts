@@ -24,23 +24,24 @@ const routes: Routes = [
     path: 'calculate-recipe',
     loadChildren: () => import('./calculate-materials/recipe/recipe-routing.module').then(m => m.RecipePageRoutingModule)
   },
-   {
+  {
     path: 'lists-recipe',
     loadChildren: () => import('./calculate-materials/lists-recipe/lists-recipe.module').then(m => m.ListsRecipePageModule)
+  },
+  {
+    path: 'recipe',
+    loadChildren: () => import('./calculate-materials/recipe/recipe.module').then(m => m.RecipePageModule)
+  },
+  {
+    path: 'edit-recipe/:id',
+    loadChildren: () => import('./calculate-materials/edit-recipe/edit-recipe.module').then(m => m.EditRecipePageModule)
   },
   {
     path: '',
     redirectTo: '/tabs/materials-management',
     pathMatch: 'full'
   },
-  {
-    path: 'recipe',
-    loadChildren: () => import('./calculate-materials/recipe/recipe.module').then( m => m.RecipePageModule)
-  },
-  {
-    path: 'lists-recipe',
-    loadChildren: () => import('./calculate-materials/lists-recipe/lists-recipe.module').then( m => m.ListsRecipePageModule)
-  },
+
 
 
 ];

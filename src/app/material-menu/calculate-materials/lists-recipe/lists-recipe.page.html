@@ -7,7 +7,7 @@
 <ion-content class="ion-padding" fullscreen>
   <ion-list *ngIf="menus.length > 0" mode="ios" >
     <ion-item-sliding *ngFor="let menu of menus">
-      <ion-item button [routerLink]="['/menu-detail', menu.id]">
+      <ion-item button [routerLink]="['../edit-recipe', menu.id]">
         <ion-label>
           <h2>{{ menu.name }}</h2>
           <p>ราคาหน้าร้าน: {{ menu.priceInShop | number:'1.0-2'}} บาท</p>

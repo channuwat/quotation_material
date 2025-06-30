@@ -29,7 +29,7 @@ export class FirevabseService {
       callback(snapshot.val());
     });
   }
-
+  
   updateData(path: string, data: any) {
     return update(ref(this.db, path), data);
   }
