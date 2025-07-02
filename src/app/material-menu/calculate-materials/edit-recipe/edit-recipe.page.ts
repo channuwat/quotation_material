@@ -32,34 +32,62 @@ export class EditRecipePage implements OnInit {
   COG = 0;
   COGD = 0;
 
-  constructor(private db: FirevabseService,private route: ActivatedRoute) {
+  constructor(private db: FirevabseService, private route: ActivatedRoute, private nav: NavController) {
 
   }
 
   ngOnInit() {
-     this.menuId = this.route.snapshot.paramMap.get('id') || '';
+    this.menuId = this.route.snapshot.paramMap.get('id') || '';
     this.fetchMaterials();
-    this.addIngredient(); // เพิ่ม 1 แถวเริ่มต้น
+
+  }
+
+  ionViewDidEnter() {
+
   }
 
   fetchMaterials() {
-    // const db = getDatabase();
-    // const materialsRef = ref(db, 'materials');
-    this.db.listenData('materials/'+this.menuId, (data: any) => {
-      console.log(data);
-      
+    this.db.listenData('menus/' + this.menuId, (data: any) => {
       if (data) {
+        this.recipeForm.patchValue({
+          menuName: data.name,
+          salePrice: data.priceInShop,
+          deliveryPrice: data.priceDelivery,
+          gasPercent: data.gasCostPercent
+        })
 
-        this.materialsList = Object.keys(data).map((key) => ({
-          id: key,
-          ...data[key],
-        }));
+        this.db.listenData('materials', (data: any) => {
+          if (data) {
+            this.materialsList = Object.keys(data).map((key) => ({
+              id: key,
+              ...data[key],
+            }));
+          }
+        })
 
-        this.materialsList.forEach((material: any) => {
-          let pricePerYield = this.calculateYieldPrice(material.price, material.yieldPercent);
-          material.pricePerYield = pricePerYield;
+        data.ingredients.forEach((material: any) => {
+          this.db.listenData('materials/' + material.materialId, (m: any) => {
+            let pricePerYield = this.calculateYieldPrice(m.price, m.yieldPercent);
+            (this.recipeForm.get('ingredients') as FormArray).push(
+              new FormGroup({
+                materialId: new FormControl(material.materialId),
+                name: new FormControl(m.name),
+                unitSub: new FormControl(m.unitSub),
+                pricePerUnit: new FormControl(m.price),
+                pricePerYield: new FormControl(pricePerYield),
+                qty: new FormControl(m.qty),
+                qtyUse: new FormControl(material.usageQty) // เพิ่มช่องให้กรอกปริมาณที่ใช้ด้วย
+              })
+            );
+          })
         });
+      } else {
+        this.addIngredient(); // เพิ่ม 1 แถวเริ่มต้น
       }
+
+      setTimeout(() => {
+        this.calculateCost();
+      }, 2000);
     })
   }
 
@@ -94,7 +122,7 @@ export class EditRecipePage implements OnInit {
         name: mat.name,
         unit: mat.unit,
         pricePerUnit: mat.price,
-        qty: mat.qty,
+        qtyUse: mat.qtyUse,
         pricePerYield: mat.pricePerYield,
       });
     }
@@ -115,5 +143,28 @@ export class EditRecipePage implements OnInit {
     this.profitSale = form.salePrice - this.productionCost; // กำไรจากการขาย
     this.profitDelivery = form.deliveryPrice - this.productionCost; // กำไรจากการขายส่งเดลิเวอร์ลี่
     this.COG = this.productionCost / form.salePrice > 0 || 0 ? this.productionCost / form.salePrice : 0; // ต้นทุนขาย (COG) = ต้นทุนการผลิต / ราคาขาย
+  }
+
+  updateRecipe() {
+    if (this.recipeForm.valid) {
+      const formValue: any = this.recipeForm.value
+      const ingredients = formValue.ingredients.map((ing: any) => ({
+        materialId: ing.materialId,
+        usageQty: ing.qtyUse // ใช้ปริมาณที่กรอกในช่อง qtyUse
+      }));
+      const updatedRecipe = {
+        name: formValue.menuName,
+        priceInShop: formValue.salePrice,
+        priceDelivery: formValue.deliveryPrice,
+        gasCostPercent: formValue.gasPercent,
+        ingredients: ingredients
+      };
+      this.db.updateData('menus/' + this.menuId, updatedRecipe).then(() => {
+        alert('อัพเดทเมนูเรียบร้อยแล้ว');
+        this.nav.back();
+      }).catch((error) => {
+        console.error('Error updating recipe:', error);
+      });
+    }
   }
 }

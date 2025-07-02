@@ -26,7 +26,7 @@
         <ion-list formArrayName="ingredients">
           <div *ngFor="let ing of ingredients.controls; let i = index" [formGroupName]="i">
             <ion-item>
-              <ion-select interface="alert" placeholder="เลือกวัตถุดิบ"
+              <ion-select interface="alert" placeholder="เลือกวัตถุดิบ" formControlName="materialId"
                 (ionChange)="onMaterialChange(i, $event.detail.value)">
                 <ion-select-option *ngFor="let m of materialsList" [value]="m.id">
                   {{ m.name }}
@@ -40,7 +40,7 @@
             </ion-item>
 
             <ion-item lines="none">
-              <ion-label>หน่วย: {{ ing.value.unit || '-' }} | ราคา: {{ ing.value.qtyUse * (ing.value.pricePerYield /
+              <ion-label>หน่วย: {{ ing.value.unitSub || '-' }} | ราคา: {{ ing.value.qtyUse * (ing.value.pricePerYield /
                 ing.value.qty) || 0 | number:'1.2-2'}} บาท</ion-label>
             </ion-item>
 
@@ -94,7 +94,7 @@
         <p>กำไร (เดลิเวอรี่): {{ profitDelivery | number:'1.2-2' }} บาท</p>
 
         <p>COG: {{ COG*100 | number:'1.0-2' }} %</p>
-        <ion-button color="success" expand="block">สร้างเมนูใหม่</ion-button>
+        <ion-button color="success" expand="block" (click)="updateRecipe()">อัพเดทเมนู</ion-button>
       </ion-card-content>
     </ion-card>
   </form>
