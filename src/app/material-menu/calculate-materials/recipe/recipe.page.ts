@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { getDatabase, onValue, ref } from 'firebase/database';
 import { FirevabseService } from 'src/app/services/firevabse.service';
@@ -12,11 +12,11 @@ import { FirevabseService } from 'src/app/services/firevabse.service';
 })
 export class RecipePage implements OnInit {
   recipeForm = new FormGroup({
-    menuName: new FormControl(''),
-    ingredients: new FormArray([]),
-    salePrice: new FormControl(0),
-    deliveryPrice: new FormControl(0),
-    gasPercent: new FormControl(5),
+    menuName: new FormControl('', Validators.required),
+    ingredients: new FormArray([], Validators.required),
+    salePrice: new FormControl(0, [Validators.required, Validators.min(0)]),
+    deliveryPrice: new FormControl(0,[Validators.required, Validators.min(0)]),
+    gasPercent: new FormControl(5, [Validators.required, Validators.min(0)]),
   });
 
   materialsList: any[] = [];
@@ -29,7 +29,8 @@ export class RecipePage implements OnInit {
   COG = 0;
   COGD = 0;
 
-  constructor(private db: FirevabseService,private navCtrl : NavController) {
+  constructor(private db: FirevabseService, private navCtrl: NavController) {
+    console.log(this.recipeForm.invalid);
 
   }
 
@@ -47,7 +48,7 @@ export class RecipePage implements OnInit {
           id: key,
           ...data[key],
         }));
-        
+
         this.materialsList.forEach((material: any) => {
           let pricePerYield = this.calculateYieldPrice(material.price, material.yieldPercent);
           material.pricePerYield = pricePerYield;
@@ -141,7 +142,7 @@ export class RecipePage implements OnInit {
       this.recipeForm.reset();
       this.ingredients.clear();
       this.addIngredient(); // เพิ่มแถววัตถุดิบเปล่า 1 แถว
-      this.navCtrl.navigateForward('/tabs/materials-management/lists-recipe'); // นำทางไปยังหน้ารายการเมนู
+      this.navCtrl.back(); // นำทางไปยังหน้ารายการเมนู
     }).catch((err) => {
       console.error('Error adding menu:', err);
       alert('เกิดข้อผิดพลาดในการเพิ่มเมนู');

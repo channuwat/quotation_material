@@ -15,11 +15,11 @@ import { FirevabseService } from 'src/app/services/firevabse.service';
 export class EditRecipePage implements OnInit {
   menuId: string = '';
   recipeForm = new FormGroup({
-    menuName: new FormControl(''),
-    ingredients: new FormArray([]),
-    salePrice: new FormControl(0),
-    deliveryPrice: new FormControl(0),
-    gasPercent: new FormControl(5),
+    menuName: new FormControl('', Validators.required),
+    ingredients: new FormArray([], Validators.required),
+    salePrice: new FormControl(0, [Validators.required, Validators.min(0)]),
+    deliveryPrice: new FormControl(0,[Validators.required, Validators.min(0)]),
+    gasPercent: new FormControl(5, [Validators.required, Validators.min(0)]),
   });
 
   materialsList: any[] = [];
@@ -33,16 +33,11 @@ export class EditRecipePage implements OnInit {
   COGD = 0;
 
   constructor(private db: FirevabseService, private route: ActivatedRoute, private nav: NavController) {
-
   }
 
   ngOnInit() {
     this.menuId = this.route.snapshot.paramMap.get('id') || '';
     this.fetchMaterials();
-
-  }
-
-  ionViewDidEnter() {
 
   }
 
