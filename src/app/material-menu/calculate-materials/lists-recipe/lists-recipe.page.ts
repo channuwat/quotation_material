@@ -25,13 +25,14 @@ export class ListsRecipePage implements OnInit {
         this.menus.push({ id: key, ...res[key] });
       }
     })
+
   }
 
   async confirmDelete(recipeId: string) {
     const alert = await this.alertCtrl.create({
       header: 'ยืนยันการลบ',
       message: 'คุณแน่ใจว่าต้องการลบเมนูนี้หรือไม่?',
-      mode:'ios',
+      mode: 'ios',
       buttons: [
         {
           text: 'ยกเลิก',
@@ -56,6 +57,25 @@ export class ListsRecipePage implements OnInit {
     }).catch((error: any) => {
       alert('เกิดข้อผิดพลาดในการลบเมนู:')
     })
+  }
+
+  calcCOG(menus: any[], typeAVG: string) {
+    let sumCost: number = 0
+    let sumPriceInShop: number = 0
+    menus.forEach((m: any) => {
+      m.totalCost = +m.totalCost
+      sumCost += m.totalCost ?? 0
+
+      m.priceInShop = +m.priceInShop
+      sumPriceInShop += m.priceInShop ?? 0
+    });
+
+    if (typeAVG === 'COG') {
+      return sumPriceInShop
+    } else {
+
+      return sumCost
+    }
   }
 
 }

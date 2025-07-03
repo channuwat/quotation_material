@@ -17,6 +17,7 @@ export class RecipePage implements OnInit {
     salePrice: new FormControl(0, [Validators.required, Validators.min(0)]),
     deliveryPrice: new FormControl(0,[Validators.required, Validators.min(0)]),
     gasPercent: new FormControl(5, [Validators.required, Validators.min(0)]),
+    totalCost : new FormControl(0)
   });
 
   materialsList: any[] = [];
@@ -30,8 +31,6 @@ export class RecipePage implements OnInit {
   COGD = 0;
 
   constructor(private db: FirevabseService, private navCtrl: NavController) {
-    console.log(this.recipeForm.invalid);
-
   }
 
   ngOnInit() {
@@ -134,6 +133,7 @@ export class RecipePage implements OnInit {
       priceInShop: Number(form.salePrice),
       priceDelivery: Number(form.deliveryPrice),
       ingredients: ingredients,
+      totalCost : this.productionCost.toFixed(2),
       createdAt: Date.now()
     };
 

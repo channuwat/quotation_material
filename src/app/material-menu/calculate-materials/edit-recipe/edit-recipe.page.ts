@@ -18,8 +18,9 @@ export class EditRecipePage implements OnInit {
     menuName: new FormControl('', Validators.required),
     ingredients: new FormArray([], Validators.required),
     salePrice: new FormControl(0, [Validators.required, Validators.min(0)]),
-    deliveryPrice: new FormControl(0,[Validators.required, Validators.min(0)]),
+    deliveryPrice: new FormControl(0, [Validators.required, Validators.min(0)]),
     gasPercent: new FormControl(5, [Validators.required, Validators.min(0)]),
+    totalCost: new FormControl(0)
   });
 
   materialsList: any[] = [];
@@ -152,7 +153,8 @@ export class EditRecipePage implements OnInit {
         priceInShop: formValue.salePrice,
         priceDelivery: formValue.deliveryPrice,
         gasCostPercent: formValue.gasPercent,
-        ingredients: ingredients
+        ingredients: ingredients,
+        totalCost: this.productionCost.toFixed(2),
       };
       this.db.updateData('menus/' + this.menuId, updatedRecipe).then(() => {
         alert('อัพเดทเมนูเรียบร้อยแล้ว');
