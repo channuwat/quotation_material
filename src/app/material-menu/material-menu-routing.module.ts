@@ -41,12 +41,13 @@ const routes: Routes = [
     loadChildren: () => import('./calculate-materials/lists-pairing-recipe/lists-pairing-recipe.module').then( m => m.ListsPairingRecipePageModule)
   },
   {
+    path: 'add-pairing-recipe',
+    loadChildren: () => import('./calculate-materials/add-pairing-recipe/add-pairing-recipe.module').then( m => m.AddPairingRecipePageModule)
+  },
+  {
     path: '',
     redirectTo: '/tabs/materials-management',
     pathMatch: 'full'
-  },  {
-    path: 'add-pairing-recipe',
-    loadChildren: () => import('./calculate-materials/add-pairing-recipe/add-pairing-recipe.module').then( m => m.AddPairingRecipePageModule)
   },
 
 

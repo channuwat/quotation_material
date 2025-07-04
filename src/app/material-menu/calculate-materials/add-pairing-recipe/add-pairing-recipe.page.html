@@ -1,13 +1,37 @@
-<ion-header [translucent]="true">
+<ion-header mode="ios">
   <ion-toolbar>
-    <ion-title>add-pairing-recipe</ion-title>
+    <ion-title>เพิ่มเซ็ทเมนูอาหาร</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">add-pairing-recipe</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding" fullscreen>
+  <form [formGroup]="setForm" (ngSubmit)="saveSet()">
+    <ion-list>
+      <ion-item>
+        <ion-label position="stacked">ชื่อเซ็ทเมนู</ion-label>
+        <ion-input formControlName="name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">ราคาเซ็ท (บาท)</ion-label>
+        <ion-input type="number" formControlName="price" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-button color="primary" expand="full" (click)="openMenuModal()">
+          <ion-icon name="camera"></ion-icon>
+          <ion-label>เลือกเมนูอาหาร</ion-label>
+        </ion-button>
+        <!-- <ion-select multiple="true" interface="popover" formControlName="menuIds">
+          <ion-select-option *ngFor="let menu of menuList" [value]="menu.id">
+            {{ menu.name }} ({{ menu.priceInShop }} บาท)
+          </ion-select-option>
+        </ion-select> -->
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" type="submit" [disabled]="setForm.invalid" class="ion-margin-top">
+      บันทึกเซ็ทเมนู
+    </ion-button>
+  </form>
 </ion-content>
