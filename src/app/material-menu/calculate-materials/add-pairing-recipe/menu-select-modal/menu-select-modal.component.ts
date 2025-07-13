@@ -29,17 +29,19 @@ export class MenuSelectModalComponent implements OnInit {
     });
   }
 
-  toggleSelect(id: string) {
-    const index = this.selectedIds.indexOf(id);
-    if (index > -1) {
-      this.selectedIds.splice(index, 1);
-    } else {
-      this.selectedIds.push(id);
-    }
+  toggleSelect(data: any) {
+    let toggle: any = data.selected == false ? true : data.selected ? false : false
+    data.selected = toggle
   }
 
   confirm() {
-    const selectedMenus = this.menuList.filter(m => this.selectedIds.includes(m.id));
+    const selectedMenus : any[] = []
+    this.menuList.forEach((m: any) => {
+      if (m.selected) {
+        selectedMenus.push(m)
+      }
+    });
+
     this.modalCtrl.dismiss({ menus: selectedMenus });
   }
 

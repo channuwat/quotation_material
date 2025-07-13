@@ -6,31 +6,97 @@
 
 <ion-content class="ion-padding" fullscreen>
   <form [formGroup]="setForm" (ngSubmit)="saveSet()">
-    <ion-list>
-      <ion-item>
-        <ion-label position="stacked">ชื่อเซ็ทเมนู</ion-label>
-        <ion-input formControlName="name" required></ion-input>
-      </ion-item>
+    <ion-card>
+      <ion-card-content>
+        <h2>
+          <strong>จัดการต้นทุน</strong>
+        </h2>
+        <ion-list>
+          <ion-item>
+            <ion-label position="stacked">ชื่อเซ็ทเมนู</ion-label>
+            <ion-input formControlName="name" required></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">ราคาเซ็ท (บาท)</ion-label>
-        <ion-input type="number" formControlName="price" required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-button color="primary" expand="full" (click)="openMenuModal()">
-          <ion-icon name="camera"></ion-icon>
+          <ion-item>
+            <ion-label position="stacked">ราคาเซ็ทหน้าร้าน (บาท)</ion-label>
+            <ion-input type="number" formControlName="priceInShop" (ionChange)="calculateCost()" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">ราคาเซ็ทเดลิเวอร์ลี่ (บาท)</ion-label>
+            <ion-input type="number" formControlName="priceDelivery" (ionChange)="calculateCost()" required></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <div>
+          <h2>
+            <strong>เมนูอาหาร</strong>
+          </h2>
+        </div>
+        <div *ngIf="selectedMenus.length > 0">
+          <ion-list>
+            <ion-item *ngFor="let selected of selectedMenus">
+              <div>
+                <strong>
+                  - {{selected.name}}
+                </strong>
+                <div>
+                  <h6>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S : {{selected.priceInShop|number}} บาท
+                  </h6>
+                </div>
+                <div>
+                  <h6>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D : {{selected.priceDelivery|number}} บาท
+                  </h6>
+                </div>
+              </div>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div *ngIf="selectedMenus.length < 1">
+          <p class="ion-text-center ion-padding">โปรดเลือกเมนูอาหาร</p>
+        </div>
+        <div class="ion-padding-top ion-padding-bottom">
+          <p>ต้นทุนราคา S : {{sumMenu('shop')}} บาท</p>
+          <p>ต้นทุนราคา D : {{sumMenu('delivery')}} บาท</p>
+          <div class="ion-text-center">
+            <h6>
+              <ion-label color="danger">
+                *** S : หน้าร้าน , D : เดลิเวอรี่ ***
+              </ion-label>
+            </h6>
+          </div>
+        </div>
+        <ion-button color="primary" expand="block" (click)="openMenuModal()">
+          <ion-icon name="checkbox-outline"></ion-icon>
           <ion-label>เลือกเมนูอาหาร</ion-label>
         </ion-button>
-        <!-- <ion-select multiple="true" interface="popover" formControlName="menuIds">
-          <ion-select-option *ngFor="let menu of menuList" [value]="menu.id">
-            {{ menu.name }} ({{ menu.priceInShop }} บาท)
-          </ion-select-option>
-        </ion-select> -->
-      </ion-item>
-    </ion-list>
-
-    <ion-button expand="block" type="submit" [disabled]="setForm.invalid" class="ion-margin-top">
+      </ion-card-content>
+    </ion-card>
+    <ion-card>
+      <ion-card-content>
+        <p>
+          <strong>ผลลัพธ์</strong>
+        </p>
+        <div>
+          <p>
+            กำไรหน้าร้าน : {{setForm.value.priceInShop}} บาท
+            (<ion-label
+              [color]="(pofitShop-sumMenu('shop')) < 0 ? 'danger' : (pofitShop-sumMenu('shop')) > -1 ? 'success' :(pofitShop-sumMenu('shop'))">{{(pofitShop-sumMenu('shop'))}}</ion-label>)
+          </p>
+          <p>
+            กำไรเดลิเวอร์ลี่ : {{setForm.value.priceDelivery}} บาท
+            (<ion-label
+              [color]="(pofitDelivery-sumMenu('delivery')) < 0 ? 'danger' : (pofitDelivery-sumMenu('delivery')) > -1 ? 'success' :(pofitDelivery-sumMenu('delivery'))">{{(pofitDelivery-sumMenu('delivery'))}}</ion-label>)
+          </p>
+          <p>COG % : {{Cogs}}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-button color="success" expand="block" type="submit" [disabled]="setForm.invalid" class="ion-margin-top">
       บันทึกเซ็ทเมนู
     </ion-button>
   </form>
