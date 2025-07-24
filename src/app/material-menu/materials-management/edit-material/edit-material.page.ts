@@ -29,7 +29,7 @@ export class EditMaterialPage implements OnInit {
       unitSub: ['', Validators.required],
       price: [null, [Validators.required, Validators.min(0)]],
       qty: [null, [Validators.required, Validators.min(0)]],
-      yieldPercent: [100,[Validators.required, Validators.min(0), Validators.max(200)]],
+      yieldPercent: [100, [Validators.required, Validators.min(0), Validators.max(200)]],
       status: ['full', Validators.required],
       storage: ['', Validators.required]
     });
@@ -38,8 +38,8 @@ export class EditMaterialPage implements OnInit {
   ngOnInit() {
     this.materialId = this.route.snapshot.paramMap.get('id')!;
   }
-  
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     setTimeout(() => {
       this.loadMaterial();
     }, 500);
@@ -68,16 +68,8 @@ export class EditMaterialPage implements OnInit {
 
     const db = getDatabase();
     const matRef = ref(db, `materials/${this.materialId}`);
-
-    try {
-      await update(matRef, this.materialForm.value);
-      await this.db.saveMaterialsToLocal((data:any)=>{
-        alert('✅ อัปเดตวัตถุดิบเรียบร้อย');
-        this.navCtrl.back();
-      })
-    } catch (error) {
-      console.error('อัปเดตล้มเหลว', error);
-    }
+    update(matRef, this.materialForm.value);
+    this.navCtrl.back();
   }
 
   async confirmDelete() {
