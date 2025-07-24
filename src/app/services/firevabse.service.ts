@@ -29,12 +29,23 @@ export class FirevabseService {
       callback(snapshot.val());
     });
   }
-  
+
   updateData(path: string, data: any) {
     return update(ref(this.db, path), data);
   }
 
   deleteData(path: string) {
     return remove(ref(this.db, path));
+  }
+
+  saveMaterialsToLocal(callback: (val: any) => void) {
+    const materials: any[] = [];
+    this.listenData('materials', (data: any[]) => {
+      for (const key in data) {
+        materials.push({ id: key, ...data[key] });
+      }
+    })
+    const jsonData = JSON.stringify(materials);
+    localStorage.setItem('materials', jsonData);
   }
 }

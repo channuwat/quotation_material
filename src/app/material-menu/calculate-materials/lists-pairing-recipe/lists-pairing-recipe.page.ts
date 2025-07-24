@@ -10,7 +10,7 @@ import { FirevabseService } from 'src/app/services/firevabse.service';
 })
 export class ListsPairingRecipePage implements OnInit {
 
-  menus: any[] = [];
+  menusSet: any[] = [];
 
   constructor(private db: FirevabseService, private alertCtrl: AlertController) { }
 
@@ -19,10 +19,10 @@ export class ListsPairingRecipePage implements OnInit {
   }
 
   loadMenus() {
-    this.db.listenData('menus', (res) => {
-      this.menus = [];
+    this.db.listenData('menuSets', (res) => {
+      this.menusSet = [];
       for (const key in res) {
-        this.menus.push({ id: key, ...res[key] });
+        this.menusSet.push({ id: key, ...res[key] });
       }
     })
 

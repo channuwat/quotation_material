@@ -71,8 +71,10 @@ export class EditMaterialPage implements OnInit {
 
     try {
       await update(matRef, this.materialForm.value);
-      alert('✅ อัปเดตวัตถุดิบเรียบร้อย');
-      this.navCtrl.back();
+      await this.db.saveMaterialsToLocal((data:any)=>{
+        alert('✅ อัปเดตวัตถุดิบเรียบร้อย');
+        this.navCtrl.back();
+      })
     } catch (error) {
       console.error('อัปเดตล้มเหลว', error);
     }

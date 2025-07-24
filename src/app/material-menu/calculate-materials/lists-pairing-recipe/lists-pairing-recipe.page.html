@@ -1,6 +1,6 @@
 <ion-header mode="ios">
   <ion-toolbar>
-    <ion-title>เซทเมนูอาหาร({{menus.length}}) [ COG % ]</ion-title>
+    <ion-title>เซทเมนูอาหาร({{menusSet.length}}) [ COG % ]</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,25 +8,25 @@
   <ion-card>
     <ion-card-content>
       <p>
-        เซทเมนูทั้งหมด : {{menus.length}}
+        เซทเมนูทั้งหมด : {{menusSet.length}}
       </p>
       <p>
-        COG AVG : {{(calcCOG(menus,'COST') / menus.length / (calcCOG(menus,'COG') / menus.length ))*100 |
+        COG AVG : {{(calcCOG(menusSet,'COST') / menusSet.length / (calcCOG(menusSet,'COG') / menusSet.length ))*100 |
         number:'1.0-2'}}
       </p>
     </ion-card-content>
   </ion-card>
   <ion-card>
     <ion-card-content>
-      <ion-list *ngIf="menus.length > 0" mode="ios">
-        <ion-item-sliding *ngFor="let menu of menus">
+      <ion-list *ngIf="menusSet.length > 0" mode="ios">
+        <ion-item-sliding *ngFor="let menu of menusSet">
           <ion-item button [routerLink]="['../edit-recipe', menu.id]">
             <ion-label>
               <h2>{{ menu.name }}</h2>
               <p>ต้นทุน: {{ menu.totalCost | number:'1.0-2'}} บาท</p>
               <p>ราคาหน้าร้าน: {{ menu.priceInShop | number:'1.0-2'}} บาท</p>
               <p> เดลิเวอรี่: {{ menu.priceDelivery | number:'1.0-2'}} บาท</p>
-              <p>ใช้ {{ menu.ingredients.length }} เมนู</p>
+              <p>ใช้ {{ menu.menuSelect.length }} เมนู</p>
               <p>สร้างเมื่อ: {{ menu.createdAt | date:'mediumDate' }}</p>
             </ion-label>
           </ion-item>
@@ -39,7 +39,7 @@
   </ion-card>
 
 
-  <ion-text color="medium" *ngIf="menus.length === 0">
+  <ion-text color="medium" *ngIf="menusSet.length === 0">
     <p class="ion-text-center">ยังไม่มีเมนูอาหาร</p>
   </ion-text>
 
