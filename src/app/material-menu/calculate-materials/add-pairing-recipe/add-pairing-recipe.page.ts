@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController, NavController } from '@ionic/angular';
 import { FirevabseService } from 'src/app/services/firevabse.service';
 import { MenuSelectModalComponent } from './menu-select-modal/menu-select-modal.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-pairing-recipe',
@@ -19,9 +20,10 @@ export class AddPairingRecipePage implements OnInit {
   });
 
   menuList: any[] = [];
+  menuId: string = '';
 
-  constructor(private db: FirevabseService, private nav: NavController, private modalCtrl: ModalController) {
-
+  constructor(private db: FirevabseService, private nav: NavController, private modalCtrl: ModalController, private route: ActivatedRoute) {
+    this.menuId = this.route.snapshot.paramMap.get('id') || '';
   }
 
   ngOnInit() {
@@ -33,6 +35,39 @@ export class AddPairingRecipePage implements OnInit {
         }));
       }
     });
+
+    if (this.menuId) {
+      this.loadSetmenu(this.menuId);
+    }
+  }
+
+  loadSetmenu(id: string) {
+    this.db.listenData('menuSets/' + id, (data: any) => {
+      const menuSelect: any = this.getMenusByLoop(data.menuSelect) || []
+      if (data) {
+        this.selectedMenus = menuSelect;
+        this.setForm.patchValue({
+          name: data.name,
+          priceInShop: data.priceInShop,
+          priceDelivery: data.priceDelivery,
+          menuSelect: menuSelect
+        });
+        console.log(menuSelect);
+      }
+      
+    });
+  }
+
+  getMenusByLoop(keys: string[]) {
+    const menus: any[] = [];
+    for (const key of keys) {
+      this.db.listenData(`menus/${key}`, (data: any) => {
+        if (data) {
+          menus.push({ id: key, ...data });
+        }
+      })
+    }
+    return menus;
   }
 
   saveSet() {
@@ -40,15 +75,25 @@ export class AddPairingRecipePage implements OnInit {
       ...this.setForm.value,
       createdAt: Date.now()
     };
-
-    this.db.pushData('menuSets', setData).then(() => {
-      alert('เพิ่มเซ็ทเมนูเรียบร้อย');
-      this.setForm.reset();
-      this.nav.back()
-    }).catch((error) => {
-      alert(error)
-    })
+    if (this.menuId == '' || this.menuId == null || this.menuId == undefined) {
+      this.db.pushData('menuSets', setData).then(() => {
+        alert('เพิ่มเซ็ทเมนูเรียบร้อย');
+        this.setForm.reset();
+        this.nav.back()
+      }).catch((error) => {
+        alert(error)
+      })
+    } else {
+      this.db.updateData('menuSets/' + this.menuId, setData).then(() => {
+        alert('แก้ไขเซ็ทเมนูเรียบร้อย');
+        this.setForm.reset();
+        this.nav.back()
+      }).catch((error) => {
+        alert(error)
+      })
+    }
   }
+
 
   selectedMenus: any = [];
   async openMenuModal() {
@@ -62,6 +107,8 @@ export class AddPairingRecipePage implements OnInit {
     modal.onDidDismiss().then((res) => {
       if (res.data) {
         this.selectedMenus = res.data.menus;
+        console.log(res.data.menus);
+
         this.setForm.get('menuSelect')?.setValue(this.selectedMenus.map((m: any) => m.id));
       }
     });
@@ -72,13 +119,16 @@ export class AddPairingRecipePage implements OnInit {
     const total: any = this.selectedMenus.reduce((sum: any, m: any) => {
       sum.shop = sum.shop + m.priceInShop
       sum.delivery = sum.delivery + m.priceDelivery
+      sum.cost = sum.cost + parseFloat(m.totalCost)
       return sum
-    }, { shop: 0, delivery: 0 });
+    }, { shop: 0, delivery: 0, cost: 0});
 
 
     if (type === 'shop') {
       return total.shop ?? 0
-    } else {
+    } else if (type === 'cost') {
+      return total.cost ?? 0
+    }else{
       return total.delivery ?? 0
     }
   }

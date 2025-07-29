@@ -45,6 +45,10 @@ const routes: Routes = [
     loadChildren: () => import('./calculate-materials/add-pairing-recipe/add-pairing-recipe.module').then( m => m.AddPairingRecipePageModule)
   },
   {
+    path: 'edit-pairing-recipe/:id',
+    loadChildren: () => import('./calculate-materials/add-pairing-recipe/add-pairing-recipe.module').then( m => m.AddPairingRecipePageModule)
+  },
+  {
     path: '',
     redirectTo: '/tabs/materials-management',
     pathMatch: 'full'

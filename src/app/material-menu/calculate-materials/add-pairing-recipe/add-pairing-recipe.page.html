@@ -40,7 +40,7 @@
             <ion-item *ngFor="let selected of selectedMenus">
               <div>
                 <strong>
-                  - {{selected.name}}
+                  - {{selected.name}} [ {{selected.totalCost | number:'1.0-2'}} ]
                 </strong>
                 <div>
                   <h6>
@@ -60,8 +60,9 @@
           <p class="ion-text-center ion-padding">โปรดเลือกเมนูอาหาร</p>
         </div>
         <div class="ion-padding-top ion-padding-bottom">
-          <p>ต้นทุนราคา S : {{sumMenu('shop')}} บาท</p>
-          <p>ต้นทุนราคา D : {{sumMenu('delivery')}} บาท</p>
+          <p>ต้นทุน : {{sumMenu('cost') | number:'1.0-2'}} บาท</p>
+          <p>หน้าร้าน : {{sumMenu('shop')}} บาท</p>
+          <p>เดลิเวอรี่ : {{sumMenu('delivery')}} บาท</p>
           <div class="ion-text-center">
             <h6>
               <ion-label color="danger">

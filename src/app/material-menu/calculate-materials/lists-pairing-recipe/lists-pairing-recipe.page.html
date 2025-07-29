@@ -20,7 +20,7 @@
     <ion-card-content>
       <ion-list *ngIf="menusSet.length > 0" mode="ios">
         <ion-item-sliding *ngFor="let menu of menusSet">
-          <ion-item button [routerLink]="['../edit-recipe', menu.id]">
+          <ion-item button [routerLink]="['../edit-pairing-recipe', menu.id]">
             <ion-label>
               <h2>{{ menu.name }}</h2>
               <p>ต้นทุน: {{ menu.totalCost | number:'1.0-2'}} บาท</p>
